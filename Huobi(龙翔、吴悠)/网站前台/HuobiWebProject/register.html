@@ -1,0 +1,146 @@
+<html lang="en" class="u-bg-transparent turbolinks-progress-bar">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Zendesk Auth</title>
+  <link rel="stylesheet" href="/public/css/login.css">
+  <link rel="stylesheet" href="/public/css/request.css" />
+  <link rel="stylesheet" href="/public/css/doctype.css" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+  <style>
+    html.turbolinks-progress-bar::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      background-color: #0076ff;
+      height: 3px;
+      opacity: 1;
+      width: 0%;
+      transition: width 0ms ease-out, opacity 0ms ease-in;
+      transform: translate3d(0, 0, 0);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="all">
+    <div class="modal">
+
+      <h2 class="title">注册 Huobi</h2>
+
+      <form id="registration-form" action="#" class="box box_form"><input name="utf8" type="hidden" value="✓"><input
+          type="hidden" name="authenticity_token">
+        <p>请填写此表格，我们将向您发送一封欢迎电邮，使您可验证电邮地址并登录。</p>
+
+        <fieldset>
+          <label for="user_name">全名 <super>*</super></label>
+          <input type="text" name="UserName" id="user_name">
+
+          <label for="user_email">电邮地址 <super>*</super></label>
+          <input type="text" name="Account" id="user_email">
+
+          <div id="recaptcha_widget">
+            <!-- <script src="https://www.recaptcha.net/recaptcha/api.js?hl=zh-cn"></script> -->
+            <div data-sitekey="6LdPNyITAAAAAG9bN96aLeu11VRFZ7m6HaFBRGf1" data-theme="light" class="g-recaptcha "
+              public_key="6LdPNyITAAAAAG9bN96aLeu11VRFZ7m6HaFBRGf1" ajax="true" width="100%">
+              <div style="width: 304px; height: 78px;">
+                <div><iframe
+                    src="https://www.recaptcha.net:443/recaptcha/api2/anchor?ar=1&amp;k=6LdPNyITAAAAAG9bN96aLeu11VRFZ7m6HaFBRGf1&amp;co=aHR0cHM6Ly9odW9iaWdsb2JhbC56ZW5kZXNrLmNvbTo0NDM.&amp;hl=zh-CN&amp;v=v1560753160450&amp;theme=light&amp;size=normal&amp;cb=3gwvj7bjg0a4"
+                    width="304" height="78" role="presentation" name="a-r2d6vhklmiox" frameborder="0" scrolling="no"
+                    sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe>
+                </div><textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response"
+                  style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea>
+              </div>
+            </div>
+
+          </div>
+
+        </fieldset>
+
+        <div class="controls">
+          <input @click="register" type="button" value="注册" disable_with_ignored="正在注册…" class="button primary">
+          <a href="JavaScript:history.go(-1)">取消</a>
+        </div>
+      </form>
+    </div>
+
+    <div
+      style="background-color: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204); box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 3px; position: absolute; transition: visibility 0s linear 0.3s, opacity 0.3s linear 0s; opacity: 0; visibility: hidden; z-index: 2000000000; left: 852.5px; top: -10000px;">
+      <div
+        style="width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 2000000000; background-color: rgb(255, 255, 255); opacity: 0.05;">
+      </div>
+      <div class="g-recaptcha-bubble-arrow"
+        style="border-width: 11px; border-style: solid; border-color: transparent rgb(204, 204, 204) transparent transparent; border-image: initial; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -11px; z-index: 2000000000; top: 290px; right: 100%;">
+      </div>
+      <div class="g-recaptcha-bubble-arrow"
+        style="border-width: 10px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; border-image: initial; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -10px; z-index: 2000000000; top: 290px; right: 100%;">
+      </div>
+      <div style="z-index: 2000000000; position: relative; width: 400px; height: 580px;"><iframe title="recaptcha 验证"
+          src="https://www.recaptcha.net:443/recaptcha/api2/bframe?hl=zh-CN&amp;v=v1560753160450&amp;k=6LdPNyITAAAAAG9bN96aLeu11VRFZ7m6HaFBRGf1&amp;cb=5awgcn58yu8o"
+          name="c-r2d6vhklmiox" frameborder="0" scrolling="no"
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"
+          style="width: 400px; height: 580px;"></iframe></div>
+    </div>
+  </div>
+</body>
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/script.js"></script>
+<script src="/public/js/snippet.js"></script>
+<script src="/public/js/doctype.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+  // 新增公告web socket推送
+  var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+  socket.connect();
+  socket.on("Notification", function (data) {
+    console.log(data);
+    toastr.success(data.data);
+  });
+
+  new Vue({
+    el: "#all",
+    methods: {
+      //注册
+      register() {
+        // 邮箱正则表达式
+        var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        // 非空判断
+        if ($("[name=UserName]").val().trim() == "" || $("[name=Account]").val().trim() == "") {
+          alert("验证失败，请重试！");
+        } else if (!reg.test($("[name=Account]").val())) {
+          alert("验证失败，请重试！");
+        } else {
+          // 注册
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/users/register",
+            type: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+              username: $("[name=UserName]").val(),
+              account: $("[name=Account]").val()
+            }),
+            success: function (data) {
+              alert("注册成功！初始密码为：123456");
+              window.history.back(-1); //返回上一步
+            }
+          })
+        }
+      }
+    }
+  })
+</script>
+
+</html>

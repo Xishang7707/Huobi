@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+</head>
+<body>
+<script>
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);  //��ȡurl��"?"�����ַ�����ƥ��
+        var context = "";
+        if (r != null)
+            context = r[2];
+        reg = null;
+        r = null;
+        return context == null || context == "" || context == "undefined" ? "" : context;
+    }
+    window.parent.CKEDITOR.tools.callFunction(GetQueryString("CKEditorFuncNum"),"https://huobi.xis7707.com/api/resource/"+GetQueryString("imageid"),GetQueryString("Message"));
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/images/logo.png">
+    <title>帮助中心</title>
+    <!-- 引入样式 -->
+    <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="public/css/style.css" rel="stylesheet" />
+    <link href="public/css/request.css" rel="stylesheet" />
+    <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div id="all">
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="public/images/huobi.png" height="37" alt="logo">
+                </a>
+            </div>
+            <div class="nav-wrapper">
+                <span class="icon-menu"></span>
+                <nav class="user-nav" id="user-nav">
+                    <a class="submit-a-request" href="requests.html">提交请求</a>
+                </nav>
+            </div>
+        </header>
+
+
+        <main role="main">
+            <div class="container-divider"></div>
+            <div class="container">
+                <nav class="sub-nav">
+                    <ol class="breadcrumbs">
+
+                        <li title="帮助中心">
+
+                            <a href="index.html">帮助中心</a>
+
+                        </li>
+
+                        <li :title="parentName">
+                            <a :href="'categories?id='+parentId+'&name='+parentName">
+                                {{parentName}}
+                            </a>
+                        </li>
+
+                        <li :title="typeName">
+
+                            <a href="JavaScript:;">{{typeName}}</a>
+
+                        </li>
+
+                    </ol>
+
+                    <form role="search" class="search" action="/search.html" accept-charset="UTF-8" method="get"><input
+                            type="search" name="query" id="query" placeholder="搜索" aria-label="搜索" /></form>
+                </nav>
+
+                <div class="section-container">
+                    <section class="section-content">
+                        <header class="page-header">
+                            <h1>
+                                {{typeName}}
+                            </h1>
+                            <div class="section-subscribe dropdown" aria-haspopup="true">
+                                <a class="dropdown-toggle" role="button" data-auth-action="signin" aria-selected="false"
+                                    title="打开登录对话框" href="#" @click="focus">关注</a>
+                                <span class="dropdown-menu" role="menu" aria-expanded="false">
+                                    <a rel="nofollow" role="menuitem" data-method="post"
+                                        href="/hc/zh-cn/sections/360000039481-%E9%87%8D%E8%A6%81%E5%85%AC%E5%91%8A/subscription?subscribe_to_grandchildren=false">新文章</a>
+                                    <a rel="nofollow" role="menuitem" data-method="post"
+                                        href="/hc/zh-cn/sections/360000039481-%E9%87%8D%E8%A6%81%E5%85%AC%E5%91%8A/subscription?subscribe_to_grandchildren=true">新文章和评论</a>
+                                </span>
+                            </div>
+
+
+                        </header>
+
+                        <ul class="article-list">
+                            <li class="article-list-item article-promoted" v-for="a in article">
+                                <span v-if="a.flag" data-title="被推荐的文章" class="icon-star"></span>
+                                <a :href="'article.html?'+a.articleId" class="article-list-link">
+                                    {{a.title}}
+                                </a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-inner">
+                <a title="主页" href="index.html">帮助中心</a>
+
+                <div class="footer-language-selector">
+
+                    <div class="dropdown language-selector" aria-haspopup="true">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <div class="btn-group dropup">
+                                    <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                                        style="color:#4f6d8c ;">简体中文&nbsp;<img
+                                            src="/public/images/xiangxia.svg" /></button>
+                                    <ul class="dropdown-menu" style="margin-left: -75px;">
+                                        <li v-for="l in langua">
+                                            <a href="javascript:;"> {{l.name}} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 登录 -->
+        <iframe src="doctype.html" style="display:none;width: 100%;height: 100%;position: absolute;top: 0px;"
+            frameborder="no" scrolling="no"></iframe>
+    </div>
+</body>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/cookie.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+    // 新增公告web socket推送
+    var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+    socket.connect();
+    socket.on("Notification", function (data) {
+        console.log(data);
+        toastr.success(data.data);
+    });
+
+    var typeId;
+    $(function () {
+        var url = location.search;
+        if (url.indexOf("?") != -1) {
+            typeId = url.substr(1);
+        }
+
+        new Vue({
+            el: "#all",
+            data: {
+                parentName: "", //父类主题名称
+                parentId: 0, //父类主题Id
+                typeName: "", //子类分类名称
+                article: [], //文章
+                langua: [] //语言信息
+            },
+            methods: {
+                // 获取分类下的所有文章
+                articles() {
+                    $.ajax({
+                        url: "https://huobi.xis7707.com/api/articles/list/" + typeId,
+                        type: "get",
+                        success: (data) => {
+                            console.info(data.data.data);
+                            this.parentName = data.data.data[0].type.parent.name; //父类主题名称
+                            this.parentId = data.data.data[0].type.parent.typeId; //父类主题Id
+                            this.typeName = data.data.data[0].type.name; //子类分类名称
+                            this.article = data.data.data; //文章
+                            //title赋值
+                            $("head title").text(data.data.data[0].type.name + " — 帮助中心");
+                        }
+                    })
+                },
+                // 关注
+                focus() {
+                    $.ajax({
+                        url: "https://huobi.xis7707.com/api/attention/" + typeId,
+                        type: "post",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + getCookie("token") //判断登录成功的关键
+                        },
+                        success: (data) => {
+                            console.info(data)
+                            selFocus(); //调用查询是否关注
+                        },
+                        complete: function (xhr, textStatus) {
+                            console.log(xhr.status);
+                            //401表示未登录
+                            if (xhr.status == "401") {
+                                //如果未登录就弹出登录
+                                $('iframe').css('display', 'block')
+                            }
+                        }
+                    })
+                },
+                //获取语言列
+                lang() {
+                    $.ajax({
+                        url: "https://huobi.xis7707.com/api/lang",
+                        type: "get",
+                        success: (data) => {
+                            console.info(data.data);
+                            this.langua = data.data;
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                //需要页面加载触发的函数
+                this.articles();
+                this.lang();
+            }
+        })
+        selFocus(); //调用查询是否关注
+    });
+
+    // 查询是否关注
+    function selFocus() {
+        $.ajax({
+            url: "https://huobi.xis7707.com/api/attention/" + typeId,
+            type: "get",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + getCookie("token") //判断登录成功的关键
+            },
+            success: function (data) {
+                console.info(data);
+                if (data.data == true) {
+                    $(".dropdown-toggle").text("已关注");
+                } else {
+                    $(".dropdown-toggle").text("关注");
+                }
+            }
+        })
+    }
+</script>
+
+</html>

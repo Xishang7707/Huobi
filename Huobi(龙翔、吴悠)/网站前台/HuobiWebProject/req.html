@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/images/logo.png">
+    <title>请求 &ndash; 帮助中心</title>
+    <!-- 引入样式 -->
+    <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="public/css/style.css" rel="stylesheet" />
+    <link href="public/css/request.css" rel="stylesheet" />
+    <link href="/public/css/toastr.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="all">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="public/images/huobi.png" height="37" alt="logo">
+                </a>
+            </div>
+            <div class="nav-wrapper">
+                <span class="icon-menu"></span>
+                <nav class="user-nav" id="user-nav">
+                    <a class="submit-a-request" href="requests.html">提交请求</a>
+                </nav>
+            </div>
+        </header>
+
+        <main role="main">
+            <nav class="my-activities-nav collapsible-nav">
+                <ul class="collapsible-nav-list container">
+                    <li aria-selected=true>请求</li>
+                    <li><a href="JavaScript:;">贡献</a></li>
+                    <li><a href="JavaScript:;">关注</a></li>
+                </ul>
+            </nav>
+
+            <div class="container">
+                <header class="my-activities-header">
+                    <h1>我的请求</h1>
+                    <nav class="my-activities-sub-nav collapsible-nav">
+                        <ul class="collapsible-nav-list">
+
+                            <li aria-selected=true>我的请求</li>
+
+                            <li>
+                                <a href="JavaScript:;">我接收抄送的请求</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </header>
+
+                <form data-form="" data-form-type="requests_filter" class="requests-table-toolbar"
+                    action="/hc/zh-cn/requests" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden"
+                        value="&#x2713;" />
+                    <div class="search">
+                        <input type="search" name="query" id="quick-search" value="" placeholder="搜索请求"
+                            class="requests-search" aria-required="false" />
+                    </div>
+
+
+                    <div class="request-table-filter">
+
+                    </div>
+
+                    <div class="request-table-filter">
+                        <label class="request-filter request-filter-label" for="request-status-select">状态：</label>
+                        <select name="status" id="request-status-select" class="request-filter" aria-required="false">
+                            <option value="">全部</option>
+                            <option value="open">已开启</option>
+                            <option value="answered">正在等待您的回复</option>
+                            <option value="solved">已解决</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="requests">
+
+                    <table class="table my-activities-table requests-table my-requests">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>Id</th>
+                                <th>
+
+                                    <a class="requests-link"
+                                        href="/hc/zh-cn/requests?sort_by=created_at&amp;sort_order=asc">创建于</a>
+
+                                </th>
+                                <th><a class="requests-link"
+                                        href="/hc/zh-cn/requests?sort_by=updated_at&amp;sort_order=asc">最后的活动<span
+                                            class="requests-sort-symbol">▼</span></a></th>
+                                <th>
+                                    状态
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr v-for="t in tickets">
+                                <td class="request-info requests-table-info">
+                                    <a href="JavaScript:;" class="striped-list-title">
+                                        {{t.content.content}}
+                                    </a>
+                                </td>
+                                <td>#{{t.ticketId}}</td>
+                                <td>
+
+                                    <time :datetime="t.createTime" data-datetime="relative">{{t.createTime}}</time>
+
+                                </td>
+                                <td><time :datetime="t.activeTime" data-datetime="relative">{{t.activeTime}}</time></td>
+                                <td class="requests-table-status">
+                                    <span v-if="t.status.name=='已开启'" class="status-label status-label-open"
+                                        title="我们正在回复您">
+                                        {{t.status.name}}
+                                    </span>
+                                    <span v-else class="status-label status-label-solved">
+                                        {{t.status.name}}
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-inner">
+                <a title="主页" href="index.html">帮助中心</a>
+
+                <div class="footer-language-selector">
+
+                    <div class="dropdown language-selector" aria-haspopup="true">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <div class="btn-group dropup">
+                                    <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                                        style="color:#4f6d8c ;">简体中文&nbsp;<img
+                                            src="/public/images/xiangxia.svg" /></button>
+                                    <ul class="dropdown-menu" style="margin-left: -75px;">
+                                        <li v-for="l in langua">
+                                            <a href="javascript:;"> {{l.name}} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+<script src="/public/js/cookie.js"></script>
+
+<script>
+    // 新增公告web socket推送
+    var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+    socket.connect();
+    socket.on("Notification", function (data) {
+        console.log(data);
+        toastr.success(data.data);
+    });
+
+    new Vue({
+        el: "#all",
+        data: {
+            langua: [], //语言信息
+            tickets: [] //工单信息
+        },
+        mounted: function () {
+            //获取语言列
+            $.ajax({
+                url: "https://huobi.xis7707.com/api/lang",
+                type: "get",
+                success: (data) => {
+                    console.info(data.data);
+                    this.langua = data.data;
+                }
+            });
+
+            //获取工单信息
+            $.ajax({
+                url: "https://huobi.xis7707.com/api/tickets/" + 700000,
+                type: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + getCookie("token") //判断是否登录成功的关键
+                },
+                success: (data) => {
+                    console.info(data.data.data);
+                    this.tickets = data.data.data;
+                }
+            });
+        }
+    })
+</script>
+
+</html>

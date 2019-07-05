@@ -1,0 +1,159 @@
+<html lang="en" class="u-bg-transparent turbolinks-progress-bar">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Zendesk Auth</title>
+
+  <link rel="stylesheet" href="/public/css/login.css">
+  <link rel="stylesheet" href="/public/css/request.css" />
+  <link rel="stylesheet" href="/public/css/doctype.css" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+  <style>
+    html.turbolinks-progress-bar::before {
+      content: ' ';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      background-color: #0076ff;
+      height: 3px;
+      opacity: 1;
+      width: 0%;
+      transition: width 0ms ease-out, opacity 0ms ease-in;
+      transform: translate3d(0, 0, 0);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="all" class="modal signin" role="dialog" aria-labelledby="signin_title">
+    <div class="login help_center">
+      <div class="interface outer">
+        <div id="cancel-link" role="button">
+          <a class="cancel-link" onclick="closes()"></a>
+        </div>
+        <div class="clear"></div>
+
+        <h2 class="title" id="signin_title">
+          登录至 Huobi
+        </h2>
+
+        <div class="interface inner">
+          <div class="services external" id="zendesk-js-login-external"><a class="service twitter" target="_top"
+              href="javascript:;"><span class="logo"></span><span title="用 Twitter 登录">用 Twitter 登录</span></a><a
+              class="service facebook" id="zd_facebook_login_link" target="_top" href=""><span class="logo"></span><span
+                title="用 Facebook 登录">用 Facebook 登录</span></a><a class="service google" target="_top" href=""><span
+                class="logo"></span><span title="用谷歌登录">用谷歌登录</span></a></div>
+
+          <div class="separator" id="zendesk-js-login-separator"></div>
+
+          <div class="services internal">
+            <form autocomplete="off" id="login-form" action="" accept-charset="UTF-8"></form><input name="utf8"
+              type="hidden" value="✓"><input type="hidden" name="authenticity_token"
+              value="+ME46hyQMGQBPhOjlcEPTvcRqAucOw6eIKx4QxKOBhRUpJxRSAlSkl6RmGcm/jDU">
+            <input type="hidden" name="return_to_on_failure" id="return_to_on_failure" value="">
+            <input type="hidden" name="return_to" id="return_to" value="">
+            <input type="hidden" name="brand_id" id="brand_id" value="">
+            <input type="hidden" name="theme" id="theme">
+            <input type="hidden" name="auth_origin" id="auth_origin" value="">
+            <input type="hidden" name="form_origin" id="form_origin" value="">
+
+            <div class="credentials">
+              <label for="user_email">电邮</label>
+              <input autofocus="autofocus" autocomplete="on" type="text" name="email" id="user_email">
+              <label for="user_password">密码</label>
+              <input autocomplete="off" type="password" name="password" id="user_password">
+            </div>
+
+            <div class="remember">
+              <input type="checkbox" name="remember_me" id="remember_me" value="1">
+              <label for="remember_me">保持登录状态</label>
+            </div>
+
+            <div class="clear"></div>
+
+            <input type="submit" name="commit" value="登录" class="button primary" @click="login">
+            </form>
+            <div class="clear"></div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="assistance">
+            <div class="roles" id="zendesk-js-login-roles">
+              <a class="multiple_options role agent" href="zendesk.html">我是专员</a>
+
+            </div>
+
+            <div class="forgot_password" id="zendesk-js-forgot-password">
+
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <div class="footnotes">
+        <div class="sign_up question">
+          <span class="question-text">第一次登录 Huobi?</span>
+          <a href="register.html">注册</a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <script src="/public/js/jquery.min.js"></script>
+  <script src="/public/js/bootstrap.min.js"></script>
+  <script src="/public/js/script.js"></script>
+  <script src="/public/js/snippet.js"></script>
+  <script src="/public/js/doctype.js"></script>
+  <script src="public/js/vue.min.js"></script>
+  <script src="public/js/vue-resource v1.5.1.js"></script>
+  <script src="/public/js/cookie.js"></script>
+  <script src="/public/js/huobi-socket.js"></script>
+  <script src="/public/js/toastr.min.js"></script>
+
+  <script>
+    // 新增公告web socket推送
+    var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+    socket.connect();
+    socket.on("Notification", function (data) {
+      console.log(data);
+      toastr.success(data.data);
+    });
+
+    new Vue({
+      el: "#all",
+      methods: {
+        login() {
+          //登录
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/users/login",
+            type: "post",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+              account: $("[name=email]").val(),
+              password: $("[name=password]").val()
+            }),
+            success: function (data) {
+              console.info(data);
+              var date = new Date();
+              var cookieTime = date.setTime(date.getTime() + 30 * 60 * 1000); // 设置date为当前时间+30分
+              setCookie("token", data.data, cookieTime); //cookie保存登录成功凭证
+              parent.location.reload(true); //刷新
+            }
+          })
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

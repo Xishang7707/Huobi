@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="/public/images/logo.png">
+  <title>帮助中心</title>
+  <!-- 引入样式 -->
+  <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="public/css/style.css" rel="stylesheet" />
+  <link href="public/css/request.css" rel="stylesheet" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+  <div id="all">
+    <!-- 头部 -->
+    <header class="header">
+      <div class="logo">
+        <a href="index.html">
+          <img src="public/images/huobi.png" height="37" alt="logo">
+        </a>
+      </div>
+      <div class="nav-wrapper">
+        <span class="icon-menu"></span>
+        <nav class="user-nav" id="user-nav">
+          <a class="submit-a-request" href="requests.html">提交请求</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 中间 -->
+    <main role="main">
+      <!-- 背景搜索框部分 -->
+      <section class="section hero">
+        <div class="hero-inner">
+          <form action="/search.html" role="search" class="search search-full" data-instant="true" autocomplete="off"
+            accept-charset="UTF-8" method="get">
+            <input type="search" name="query" id="query" placeholder="搜索" autocomplete="off" aria-label="搜索">
+          </form>
+        </div>
+      </section>
+      <div class="container">
+        <!-- 公告部分 -->
+        <section class="section knowledge-base">
+          <section class="categories blocks">
+            <ul class="blocks-list">
+              <li class="blocks-item" v-for="t in types">
+                <a :href="'categories?id='+t.typeId+'&name='+t.name" class="blocks-item-link">
+                  <h4 class="blocks-item-title">{{t.name}}</h4>
+                  <p class="blocks-item-description"></p>
+                </a>
+              </li>
+            </ul>
+          </section>
+          <!-- 文章部分 -->
+          <section class="articles">
+            <h3>被推荐的文章</h3>
+            <ul class="article-list promoted-articles">
+              <li class="promoted-articles-item" v-for="r in recomme">
+                <a :href="'article.html?'+r.articleId">
+                  {{r.title}}
+                </a>
+              </li>
+            </ul>
+          </section>
+
+        </section>
+
+        <!-- 活动部分 -->
+        <section class="section activity">
+          <div data-app="recent-activity" data-url="/hc/api/internal/recent_activities?locale=zh-cn">
+            <div class="recent-activity">
+              <h2 class="recent-activity-header">最近的活动</h2>
+              <ul class="recent-activity-list">
+                <li v-for="a in activitys" class="recent-activity-item" data-recent-activity-action="article_created">
+                  <a class="recent-activity-item-parent" :href="'sections.html?'+a.type.typeId">
+                    {{a.type.name}}
+                  </a>
+                  <a class="recent-activity-item-link" :href="'article.html?'+a.articleId">
+                    {{a.title}}
+                  </a>
+                  <div class="recent-activity-item-meta">
+                    <div class="recent-activity-item-time">文章创建于 1 小时前</div>
+                    <div class="recent-activity-item-comment"><span>{{a.comment.count}}</span></div>
+                  </div>
+                </li>
+              </ul>
+              <div class="recent-activity-no-activities" style="display: none;"></div>
+              <div class="recent-activity-loader" style="display: none;">...</div>
+              <div class="recent-activity-controls" v-if="activitys.length < pagination.total"><a href="javascript:;"
+                  @click="activity(pagination.page+1)">查看更多</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+
+    <!-- 底部 -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <a title="主页" href="index.html">帮助中心</a>
+
+        <div class="footer-language-selector">
+
+          <div class="dropdown language-selector" aria-haspopup="true">
+            <div class="row clearfix">
+              <div class="col-md-12 column">
+                <div class="btn-group dropup">
+                  <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                    style="color:#4f6d8c ;">简体中文&nbsp;<img src="/public/images/xiangxia.svg" /></button>
+                  <ul class="dropdown-menu" style="margin-left: -75px;">
+                    <li v-for="l in langua">
+                      <a href="javascript:;"> {{l.name}} </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 帮助 -->
+    <div class="chat-launcher"><img src="public/images/shouye.svg" width="24" height="24" />&nbsp;帮助</div>
+    <div class="chat-wrapper">
+      <div class="card">
+        <div class="headers">
+          <ul class="list-unstyled team-info margin-0">
+            <li class="m-r-15">
+              <h4>
+                帮助
+                <button onclick="help()" type="button"
+                  style="border: none;background:transparent;float:right;margin-right: 10px;"><img
+                    src="public/images/jianhaocu.svg" /></button>
+              </h4>
+            </li>
+          </ul>
+        </div>
+        <div class="body">
+          <div class="chat-widget">
+            <ul class="chat-scroll-list clearfix">
+              <li class="right">
+                <input type="text" class="form-control help" name="search" placeholder="我们如何来帮助?" />
+                <i class="helpSearch"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- JS -->
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/vendorscripts.bundle.js"></script>
+<script src="public/js/mainscripts.bundle.js"></script><!-- 帮助JS -->
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+  // 新增公告web socket推送
+  var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+  socket.connect();
+  socket.on("Notification", function (data) {
+    console.log(data);
+    //推送半分钟
+    toastr.success(data.data);
+  });
+
+  new Vue({
+    el: "#all",
+    data: {
+      types: [], //主题
+      recomme: [], //推荐文章
+      activitys: [], //最近的活动
+      langua: [], //语言信息
+      pagination: {
+        page: 1,
+        totalPage: 1,
+        total: 0,
+        count: 5
+      }
+    },
+    methods: {
+      // 获取主题
+      themeType() {
+        this.$http.get("https://huobi.xis7707.com/api/articles/subjects/zh-CN", {
+          emulateJSON: true
+        }).then(function (data) {
+          // 成功的函数
+          console.info(data);
+          this.types = data.body.data;
+        }, function (data) {
+          //错误执行的函数
+          console.info(data);
+        });
+      },
+      // 最近活动
+      activity(page) {
+        this.$http.get("https://huobi.xis7707.com/api/articles/recentActivity/zh-CN/" + page + '/' + this.pagination.count, {
+          emulateJSON: true
+        }).then((data) => {
+          // 成功函数
+          console.info(data.body.data);
+          this.pagination['page'] = data.body.data['page'];
+          this.pagination['totalPage'] = data.body.data['totalPage'];
+          this.pagination['total'] = data.body.data['total'];
+          var dt = this.activitys.concat(data.body.data['data']);
+          this.activitys = dt;
+        }, function (data) {
+          // 失败函数
+          console.info(data); //打印
+        });
+      },
+      //推荐文章
+      recommend() {
+        this.$http.get("https://huobi.xis7707.com/api/articles/recommended/zh-CN", {
+          emulateJSON: true
+        }).then(function (data) {
+          //成功执行的函数
+          console.info(data.body.data);
+          this.recomme = data.body.data;
+        }, function (data) {
+          //失败执行的函数
+          console.info(data);
+        });
+      },
+      //获取语言列
+      lang() {
+        $.ajax({
+          url: "https://huobi.xis7707.com/api/lang",
+          type: "get",
+          success: (data) => {
+            console.info(data.data);
+            this.langua = data.data;
+          }
+        });
+      }
+    },
+    mounted: function () {
+      //需要页面加载触发的函数
+      this.themeType();
+      this.activity(1);
+      this.recommend();
+      this.lang();
+    }
+  })
+</script>
+
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="shortcut icon" type="image/x-icon" href="public/images/logo.png">
+  <title>帮助中心</title>
+  <!-- 引入样式 -->
+  <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="public/css/style.css" rel="stylesheet" />
+  <link href="public/css/request.css" rel="stylesheet" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+  <header class="header">
+    <div class="logo">
+      <a href="index.html">
+        <img src="public/images/huobi.png" height="37" alt="logo">
+      </a>
+    </div>
+    <div class="nav-wrapper">
+      <span class="icon-menu"></span>
+      <nav class="user-nav" id="user-nav">
+        <a class="submit-a-request" href="requests.html">提交请求</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <main role="main">
+    <div class="container-divider"></div>
+    <div class="container">
+      <nav class="sub-nav">
+        <ol class="breadcrumbs">
+
+          <li title="帮助中心">
+
+            <a href="index.html">帮助中心</a>
+
+          </li>
+
+        </ol>
+
+        <form action="/search.html" role="search" class="search search-full" data-instant="true" autocomplete="off"
+          accept-charset="UTF-8" method="get">
+          <input type="search" name="query" id="query" placeholder="搜索" autocomplete="off" aria-label="搜索">
+        </form>
+      </nav>
+
+      <div class="article-container" id="article-container">
+        <section class="article-sidebar">
+          <section class="section-articles collapsible-sidebar">
+            <h3 class="collapsible-sidebar-title sidenav-title">此组别内的文章</h3>
+            <ul name="articlesType">
+              <!-- 分类下的所有文章 -->
+            </ul>
+
+            <!-- <a href="javascript:;" class="article-sidebar-item">查看更多</a> -->
+
+          </section>
+        </section>
+
+        <article class="article">
+          <header class="article-header">
+            <h1 title="最强攻略：一文教你玩转火币" class="article-title">
+              最强攻略：一文教你玩转火币
+
+            </h1>
+
+            <div class="article-author">
+              <div class="avatar article-avatar">
+
+                <span class="icon-agent"></span>
+
+                <img src="https://huobiglobal.zendesk.com/system/photos/3600/0021/1841/Artboard_1.png" alt="Avatar"
+                  class="user-avatar" />
+              </div>
+              <div class="article-meta">
+
+                <e name="author">Huobi</e>
+
+                <ul class="meta-group">
+
+                  <li class="meta-data"><time id="updateTime" datetime="2019-07-02T17:01:31" title="2019-07-02T17:01:31"
+                      data-datetime="relative"></time></li>
+                  <li class="meta-data">更新于</li>
+
+                </ul>
+              </div>
+            </div>
+          </header>
+
+          <section class="article-info">
+            <div class="article-content">
+              <div class="article-body">
+
+              </div>
+
+              <div class="article-attachments">
+                <ul class="attachments">
+
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <footer>
+            <div class="article-footer">
+              <div class="article-share">
+                <ul class="share">
+                  <li><a href="javascript:;" class="share-facebook">Facebook</a></li>
+                  <li><a href="javascript:;" class="share-twitter">Twitter</a></li>
+                  <li><a href="javascript:;" class="share-linkedin">LinkedIn</a></li>
+                </ul>
+              </div>
+
+              <a href="#article-comments" class="article-comment-count">
+                <span class="icon-comments"></span>
+                <e class="index">2</e>
+              </a>
+
+            </div>
+
+
+            <div class="article-votes">
+              <span class="article-votes-question">这篇文章有帮助吗？</span>
+              <div class="article-votes-controls" role='radiogroup'>
+                <a @click="isHelp(1)" role="radio" rel="nofollow" class="button article-vote article-vote-up" title="是"
+                  :aria-selected="yes" data-helper="vote" data-item="article" data-type="up" href="JavaScript:;"></a>
+                <a @click="isHelp(0)" role="radio" rel="nofollow" class="button article-vote article-vote-down"
+                  title="否" :aria-selected="no" data-helper="vote" data-item="article" data-type="down"
+                  data-selected-class="null" href="JavaScript:;"></a>
+              </div>
+              <small class="article-votes-count">
+                <span class="article-vote-label" data-helper="vote" data-item="article"
+                  data-type="label">{{helpful.sumCount}} 人中有
+                  {{helpful.helpfulCount}} 人觉得有帮助</span>
+              </small>
+            </div>
+
+            <div class="article-more-questions">
+              还有其它问题？<a href="requests.html">提交请求</a>
+            </div>
+
+
+            <div class="article-return-to-top">
+              <a href="#article-container">返回页首<span class="icon-arrow-up"></span></a>
+            </div>
+          </footer>
+
+          <section class="article-relatives">
+            <div data-recent-articles></div>
+
+            <section class="related-articles">
+              <h3>相关文章</h3>
+              <ul>
+
+                <li v-for="r in relateds">
+                  <a :href="'article.html?'+r.articleId" rel="nofollow">
+                    {{r.title}}
+                  </a>
+                </li>
+
+              </ul>
+            </section>
+
+
+          </section>
+          <div class="article-comments" id="article-comments">
+
+            <section class="comments closes">
+              <header class="comment-overview">
+                <h3 class="comment-heading">
+                  评论
+                </h3>
+                <p class="comment-callout">0 条评论</p>
+
+              </header>
+
+              <ul id="comments" class="comment-list">
+
+              </ul>
+
+              <p class="comment-callout">文章评论已关闭。</p>
+            </section>
+
+            <section class="comments open">
+              <header class="comment-overview">
+                <h3 class="comment-heading">
+                  评论
+                </h3>
+                <p class="comment-callout">
+                  <e class="index">2</e> 条评论
+                </p>
+
+                <div class="dropdown comment-sorter">
+                  <a class="dropdown-toggle">排序方式&nbsp;<img src="/public/images/xiangxia.svg" /></a>
+                  <span class="dropdown-menu" role="menu" aria-expanded="false">
+
+                    <a aria-selected="true" href="javascript:;" role="menuitem">日期</a>
+
+                    <a aria-selected="false" href="javascript:;" role="menuitem">投票数</a>
+
+                  </span>
+                </div>
+
+              </header>
+
+              <ul id="comment" class="comment-list">
+
+              </ul>
+
+            </section>
+            <div id="com">
+              <hr>
+              <p class="comment-call">请
+                <a href="javascript:;" onclick="$('iframe').css('display','block')">登录</a>
+                写评论
+              </p>
+              <p class="comment-form">
+                <div class="avatar comment-avatar userimg">
+                  <img class="user-avatar" data-user-avatar="true"
+                    src="https://secure.gravatar.com/avatar/00fd1f38dc00b906a24afa8903e51f8e?default=https%3A%2F%2Fassets.zendesk.com%2Fhc%2Fassets%2Fdefault_avatar.png&amp;r=g">
+                </div>
+                <div class="comment-container">
+                  <textarea name="Content" id="comment_body" aria-required="true"></textarea>
+                  <div class="comment-form-controls">
+                    <input type="submit" onclick="comments()" name="commit" value="提交">
+                  </div>
+                </div>
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+  </main>
+
+  <iframe src="doctype.html" style="display:none;width: 100%;height: 100%;position: absolute;top: 0px;" frameborder="no"
+    scrolling="no"></iframe>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <a title="主页" href="index.html">帮助中心</a>
+
+      <div class="footer-language-selector">
+
+        <div class="dropdown language-selector" aria-haspopup="true">
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <div class="btn-group dropup">
+                <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                  style="color:#4f6d8c ;">简体中文&nbsp;<img src="/public/images/xiangxia.svg" /></button>
+                <ul class="dropdown-menu" style="margin-left: -75px;">
+                  <li v-for="l in langua">
+                    <a href="javascript:;"> {{l.name}} </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/hc_enduser.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/doctype.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/cookie.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+  // 新增公告web socket推送
+  var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+  socket.connect();
+  socket.on("Notification", function (data) {
+    console.log(data);
+    toastr.success(data.data);
+  });
+
+  var articleId, articleLangId, typeId, vue;
+  $(function () {
+    //获取路径传过来的值
+    var url = location.search;
+    if (url.indexOf("?") != -1) {
+      articleId = url.substr(1);
+    }
+
+    vue = new Vue({
+      el: ".article-votes",
+      data: {
+        yes: false, //判断是否有帮助评价过
+        no: false, //判断是否有帮助评价过
+        helpful: [] //是否有帮助统计信息
+      },
+      methods: {
+        //获取文章
+        article() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/articles/" + articleId,
+            type: "get",
+            async: false,
+            success: function (data) {
+              console.info(data);
+              articleLangId = data.data.articleLangId;
+              typeId = data.data.type.typeId;
+              //赋值
+              $(".article-header h1").attr("title", data.data.title);
+              $(".article-header h1").text(data.data.title);
+              $("head title").text(data.data.title + " — 帮助中心");
+              $(".article-body").html(data.data.content);
+              $(".breadcrumbs").append('<li title="' + data.data.type.parent.name +
+                '"><a href="categories?id=' + data.data.type.parent.typeId + '&name=' + data.data.type
+                .parent.name + '">' + data.data.type.parent.name +
+                '</a></li><li title="' + data
+                .data.type.name + '"><a href="sections.html?' + data.data.type.typeId + '">' + data.data
+                .type.name + '</a></li>');
+              //为零关闭评论
+              if (data.data.commentable == 0) {
+                $(".closes").css("display", "block");
+                $("#com").css("display", "none");
+              } else {
+                $(".open").css("display", "block");
+              }
+              $("[name=author]").text(data.data.user.userName);
+              $("#updateTime").attr("datetime", data.data.updateTime);
+              $("#updateTime").attr("title", data.data.updateTime);
+            }
+          })
+        },
+        // 查询评论
+        selComments() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/comments/retrieves/" + articleLangId,
+            type: "get",
+            async: false,
+            success: function (data) {
+              console.info(data.data.data);
+              $(".comment").remove();
+              for (var i = 0; i < data.data.data.length; i++) {
+                var ht =
+                  '<li class="comment"><div class="comment-wrapper"><div class="comment-info"><div class="comment-author"><div class="avatar comment-avatar"><img src="https://secure.gravatar.com/avatar/00fd1f38dc00b906a24afa8903e51f8e?default=https%3A%2F%2Fassets.zendesk.com%2Fhc%2Fassets%2Fdefault_avatar.png&amp;r=g" alt="Avatar" class="user-avatar" /></div><div class="comment-meta"><span title="' +
+                  data.data.data[i].user.userName + '">' + data.data.data[i].user.userName +
+                  '</span><ul class="meta-group"><li class="meta-data"><time datetime="' + data.data.data[
+                    i].createTime + '" title="' + data.data.data[i].createTime +
+                  '" data-datetime="relative">' + data.data.data[i].createTime +
+                  '</time></li></ul></div><div class="comment-labels"></div></div><section class="comment-body"><p>' +
+                  data.data.data[i].content +
+                  '</p></section></div><div class="comment-actions-container"><div class="comment-vote vote" role="radiogroup"><a onclick="givelike(' +
+                  data.data.data[i].commentId +
+                  ',' + 1 +
+                  ')" role="radio" rel="nofollow" class="vote-up" title="是" aria-selected="false" href="javascript:;"></a><span class="vote-sum">' +
+                  (data.data.data[i].commentLike.like + data.data.data[i].commentLike.dislike) +
+                  '</span><a onclick="givelike(' +
+                  data.data.data[i].commentId +
+                  ',' + 0 +
+                  ')" role="radio" rel="nofollow" class="vote-down" title="否" aria-selected="false" href="javascript:;"></a></div><div class="comment-actions actions"><span class="dropdown"><span class="dropdown-toggle"></span><span class="dropdown-menu" role="menu"> <a role="menuitem" rel="nofollow" data-action="show-permalink" href="JavaScript:;">固定链接</a></span></span></div></div></div></li>';
+                $("#comment").append(ht);
+              }
+              $(".index").text(data.data.data.length);
+            }
+          })
+        },
+        // 获取用户信息（判断是否登录）
+        selUser() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/users/info",
+            type: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + getCookie("token") //判断是否登录成功的关键
+            },
+            success: function (data) {
+              console.info(data)
+              $(".userimg").css("display", "block");
+              $(".comment-container").css("display", "block");
+            },
+            error: function (data) {
+              console.info(data.status)
+              if (data.status == "401") {
+                //401为未登录，则弹出登录
+                $(".comment-call").css("display", "block");
+              }
+            }
+          })
+        },
+        // 获取分类下的所有文章
+        types() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/articles/list/" + typeId,
+            type: "get",
+            success: function (data) {
+              console.info(data.data.data);
+              for (var i = 0; i < data.data.data.length; i++) {
+                // console.info(data.data.data[i].articleLangId)
+                var ht = '<li name="active"><a href="article.html?' + data.data.data[i].articleId +
+                  '" class="sidenav-item">' + data.data
+                  .data[i].title +
+                  '</a></li>';
+                $("[name=articlesType]").append(ht);
+                if (data.data.data[i].articleId == articleId) {
+                  //如果判断成立，添加选中样式
+                  $($("[name=active] a")[i]).attr("class", "sidenav-item current-article");
+                }
+              }
+            }
+          })
+        },
+        isHelp(obj) {
+          //是否有帮助
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/articles/helpful/" + articleLangId + "/" + obj,
+            type: "get",
+            success: (data) => {
+              console.info(data);
+              this.selHelp();
+            },
+            error: (data) => {
+              console.info(data.responseJSON.status);
+            }
+          });
+        },
+        // 是否有帮助统计信息
+        statistical() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/articles/helpful/" + articleLangId,
+            type: "get",
+            success: (data) => {
+              console.info(data);
+              this.helpful = data.data;
+            }
+          });
+        },
+        // 有无帮助是否已经评价过
+        selHelp() {
+          $.ajax({
+            url: "https://huobi.xis7707.com/api/articles/helpful/" + articleLangId,
+            type: "post",
+            success: (data) => {
+              console.info(data);
+              if (data.data == 1) {
+                this.yes = true;
+              } else if (data.data == -1) {
+                this.no = true;
+              }
+              this.statistical();//帮助统计信息
+            }
+          })
+        }
+      },
+      mounted: function () {
+        //需要页面加载的函数
+        this.article();
+        this.selComments();
+        this.selUser();
+        this.types();
+        this.selHelp();
+        this.statistical();
+      }
+    })
+
+    //获取语言列
+    $.ajax({
+      url: "https://huobi.xis7707.com/api/lang",
+      type: "get",
+      success: (data) => {
+        console.info(data.data);
+        new Vue({
+          el: ".footer",
+          data: {
+            langua: data.data
+          },
+        })
+      }
+    });
+
+    //相关文章
+    $.ajax({
+      url: "https://huobi.xis7707.com/api/articles/related/" + articleLangId + "/5",
+      type: "get",
+      success: (data) => {
+        console.info(data.data);
+        new Vue({
+          el: ".related-articles",
+          data: {
+            relateds: data.data
+          }
+        })
+      }
+    })
+  })
+
+  //发布评论
+  function comments() {
+    console.info(articleLangId)
+    console.info($("[name=Content]").val())
+    //非空验证
+    if ($("[name=Content]").val().trim() == "") {
+      alert("评论不能为空");
+    } else {
+      $.ajax({
+        url: "https://huobi.xis7707.com/api/comments/publish",
+        type: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + getCookie("token") //判断是否登录成功的关键
+        },
+        data: JSON.stringify({
+          articleLangId: articleLangId,
+          content: $("[name=Content]").val()
+        }),
+        success: function (data) {
+          location.reload(true);
+        },
+        complete: function (xhr, textStatus) {
+          console.log(xhr.status);
+          if (xhr.status == "401") {
+            //401为未登录，则弹出登录
+            $('iframe').css('display', 'block')
+          }
+        }
+      })
+    }
+  }
+
+  //点赞
+  function givelike(commentId, islike) {
+    $.ajax({
+      url: "https://huobi.xis7707.com/api/comments/like/" + commentId + "/" + islike,
+      type: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + getCookie("token") //判断是否登录成功的关键
+      },
+      success: (data) => {
+        console.info(data);
+        vue.selComments();
+      },
+      complete: function (xhr, textStatus) {
+        console.log(xhr.stastu);
+        if (xhr.status == "401") {
+          //401为未登录，则弹出登录
+          $('iframe').css('display', 'block')
+        }
+      },
+      error: (data) => {
+        if (data.status == "400") {
+          console.info(data.responseJSON.status);
+        }
+      }
+    })
+  }
+</script>
+
+</html>

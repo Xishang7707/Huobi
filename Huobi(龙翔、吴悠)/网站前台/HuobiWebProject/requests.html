@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="public/images/logo.png">
+    <title>提交请求 帮助中心</title>
+    <!-- 引入样式 -->
+    <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="public/css/style.css" rel="stylesheet" />
+    <link href="public/css/request.css" rel="stylesheet" />
+    <link href="/public/css/toastr.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="all">
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="public/images/huobi.png" height="37" alt="logo">
+                </a>
+            </div>
+            <div class="nav-wrapper">
+                <span class="icon-menu"></span>
+                <nav class="user-nav" id="user-nav">
+                    <a class="submit-a-request" href="requests.html">提交请求</a>
+                </nav>
+            </div>
+        </header>
+
+
+        <main role="main">
+            <div class="container-divider"></div>
+            <div class="container">
+                <nav class="sub-nav">
+                    <ol class="breadcrumbs">
+
+                        <li title="帮助中心">
+
+                            <a href="index.html">帮助中心</a>
+
+                        </li>
+
+                        <li title="提交请求">
+
+                            提交请求
+
+                        </li>
+
+                    </ol>
+
+                    <form action="/search.html" role="search" class="search search-full" data-instant="true"
+                        autocomplete="off" accept-charset="UTF-8" method="get">
+                        <input type="search" name="query" id="query" placeholder="搜索" autocomplete="off"
+                            aria-label="搜索">
+                    </form>
+                </nav>
+
+                <h1>
+                    提交请求
+
+                </h1>
+
+                <div class="form">
+                    <form id="new_request" class="request-form" data-form="" data-form-type="request"
+                        action="/hc/zh-cn/requests" accept-charset="UTF-8" method="post"><input name="utf8"
+                            type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token"
+                            value="hc:requests:server:daPZKIKqS5pP2rxzZD2Ox8k3DXJNjDMsDCxKcP7jL6fzHS/jotgls9WUKWMT0h1AFoITk+b1c15QMS66TERnmg==" />
+                        <div class="form-field select optional request_ticket_form_id"><label
+                                for="request_issue_type_select">Please choose your issue below</label>
+                            <select id="request_issue_type_select" onchange="requests(this.value)">
+                                <option value="1">-
+                                </option>
+                                <option value="2">PRO工单
+                                </option>
+                                <option value="3">OTC工单
+                                </option>
+                            </select></div>
+
+                    </form>
+                </div>
+            </div>
+
+        </main>
+
+        <div style="height: 300px;"></div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-inner">
+                <a title="主页" href="index.html">帮助中心</a>
+
+                <div class="footer-language-selector">
+
+                    <div class="dropdown language-selector" aria-haspopup="true">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <div class="btn-group dropup">
+                                    <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                                        style="color:#4f6d8c ;">简体中文&nbsp;<img
+                                            src="/public/images/xiangxia.svg" /></button>
+                                    <ul class="dropdown-menu" style="margin-left: -75px;">
+                                        <li v-for="l in langua">
+                                            <a href="javascript:;"> {{l.name}} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+    // 新增公告web socket推送
+    var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+    socket.connect();
+    socket.on("Notification", function (data) {
+        console.log(data);
+        toastr.success(data.data);
+    });
+
+    new Vue({
+        el: "#all",
+        data: {
+            langua: [] //语言信息
+        },
+        mounted: function () {
+            //获取语言列
+            $.ajax({
+                url: "https://huobi.xis7707.com/api/lang",
+                type: "get",
+                success: (data) => {
+                    console.info(data.data);
+                    this.langua = data.data;
+                }
+            });
+        }
+    })
+
+    // 请求页面互相跳转
+    function requests(obj) {
+        if (obj == 1) {
+            location.href = "/requests.html";
+        }
+        if (obj == 2) {
+            location.href = "/request-pro.html?400001";
+        }
+        if (obj == 3) {
+            location.href = "/request-otc.html?400002";
+        }
+    }
+</script>
+
+</html>

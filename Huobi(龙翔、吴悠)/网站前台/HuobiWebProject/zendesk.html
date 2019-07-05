@@ -1,0 +1,123 @@
+<html lang="en" class="u-bg-transparent turbolinks-progress-bar">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Zendesk Auth</title>
+  <link rel="stylesheet" href="/public/css/login.css">
+  <link rel="stylesheet" href="/public/css/request.css" />
+  <link rel="stylesheet" href="/public/css/doctype.css" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+  <style>
+    html.turbolinks-progress-bar::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      background-color: #0076ff;
+      height: 3px;
+      opacity: 1;
+      width: 0%;
+      transition: width 0ms ease-out, opacity 0ms ease-in;
+      transform: translate3d(0, 0, 0);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="modal signin" role="dialog" aria-labelledby="signin_title">
+    <div class="login help_center">
+      <div class="interface outer">
+        <div id="cancel-link" role="button">
+          <a class="cancel-link" onclick="closes()"></a>
+        </div>
+        <div class="clear"></div>
+
+        <h2 class="title" id="signin_title">
+          登录至 Huobi
+        </h2>
+
+        <div class="interface inner">
+
+          <div class="services internal">
+            <form autocomplete="off" id="login-form" action="https://huobiglobal.zendesk.com/access/login"
+              accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden"
+                name="authenticity_token" value="+ME46hyQMGQBPhOjlcEPTvcRqAucOw6eIKx4QxKOBhRUpJxRSAlSkl6RmGcm/jDU">
+              <input type="hidden" name="return_to_on_failure" id="return_to_on_failure"
+                value="/auth/v2/login/signin?auth_origin=114095082532%2Cfalse%2Ctrue&amp;brand_id=114095082532&amp;return_to=https%3A%2F%2Fhuobiglobal.zendesk.com%2Fhc%2Fzh-cn%2Farticles%2F360000311121--%25E5%2585%25B3%25E4%25BA%258E2019%25E5%25B9%25B45%25E6%259C%2588%25E5%25BA%25A6%25E7%2594%25A8%25E6%2588%25B7-%25E5%25B9%25BF%25E5%2591%258A%25E6%2596%25B9%25E7%25A7%25AF%25E5%2588%2586%25E7%25AE%25A1%25E7%2590%2586%25E5%2592%258C%25E5%258F%2596%25E6%25B6%2588%25E5%2588%25B6%25E5%25BA%25A6%25E8%25BF%2590%25E8%25A1%258C%25E6%2583%2585%25E5%2586%25B5%25E9%2580%259A%25E6%258A%25A5-&amp;role=agent&amp;theme=hc">
+              <input type="hidden" name="return_to" id="return_to"
+                value="https://huobiglobal.zendesk.com/auth/v2/login/signed_in?auth_origin=114095082532%2Cfalse%2Ctrue&amp;brand_id=114095082532&amp;theme=hc">
+              <input type="hidden" name="brand_id" id="brand_id" value="114095082532">
+              <input type="hidden" name="theme" id="theme" value="hc">
+              <input type="hidden" name="auth_origin" id="auth_origin" value="114095082532,false,true">
+              <input type="hidden" name="form_origin" id="form_origin" value="hc">
+
+              <div class="credentials">
+                <label for="user_email">电邮</label>
+                <input autofocus="autofocus" autocomplete="on" type="email" name="user[email]" id="user_email">
+                <label for="user_password">密码</label>
+                <input autocomplete="off" type="password" name="user[password]" id="user_password">
+              </div>
+
+              <div class="remember">
+                <input type="checkbox" name="remember_me" id="remember_me" value="1">
+                <label for="remember_me">保持登录状态</label>
+              </div>
+
+              <div class="clear"></div>
+
+              <input type="submit" name="commit" value="登录" class="button primary">
+            </form>
+            <div class="clear"></div>
+          </div>
+
+          <div class="clear"></div>
+
+          <div class="assistance">
+            <div class="roles" id="zendesk-js-login-roles">
+
+              <a class="multiple_options role end_user" href="doctype.html">我是客户</a>
+            </div>
+
+            <div class="forgot_password" id="zendesk-js-forgot-password">
+              <a href="remember.html">忘记密码</a>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <div class="footnotes">
+        <div class="sign_up question">
+          <span class="question-text">第一次登录 Huobi?</span>
+          <a href="register.html">注册</a>
+        </div>
+
+      </div>
+      <a class="privacy_link" target="_blank" href="JavaScript:;">隐私政策</a>
+    </div>
+  </div>
+</body>
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/script.js"></script>
+<script src="/public/js/snippet.js"></script>
+<script src="/public/js/doctype.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+  // 新增公告web socket推送
+  var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+  socket.connect();
+  socket.on("Notification", function (data) {
+    console.log(data);
+    toastr.success(data.data);
+  });
+</script>
+
+</html>

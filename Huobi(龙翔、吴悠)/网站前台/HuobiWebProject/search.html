@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/images/logo.png">
+    <title>搜索结果 &ndash; 帮助中心</title>
+    <!-- 引入样式 -->
+    <link href="public/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="public/css/style.css" rel="stylesheet" />
+    <link href="public/css/request.css" rel="stylesheet" />
+    <link href="/public/css/toastr.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="all">
+        <header class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="public/images/huobi.png" height="37" alt="logo">
+                </a>
+            </div>
+            <div class="nav-wrapper">
+                <span class="icon-menu"></span>
+                <nav class="user-nav" id="user-nav">
+                    <a class="submit-a-request" href="requests.html">提交请求</a>
+                </nav>
+            </div>
+        </header>
+
+
+        <main role="main">
+            <div class="container-divider"></div>
+            <div class="container">
+                <nav class="sub-nav">
+                    <ol class="breadcrumbs">
+
+                        <li title="帮助中心">
+
+                            <a href="index.html">帮助中心</a>
+
+                        </li>
+
+                        <li title="搜索结果">
+
+                            搜索结果
+
+                        </li>
+
+                    </ol>
+
+                    <form role="search" class="search" data-search="" action="/search.html" accept-charset="UTF-8"
+                        method="get"><input type="search" name="query" id="query" :value="keyword" placeholder="搜索"
+                            autofocus="autofocus" aria-label="搜索" /></form>
+                </nav>
+
+                <header class="page-header">
+                    <h1>搜索结果</h1>
+                    <p class="page-header-description">“{{keyword}}”的结果：{{len}} 条</p>
+                </header>
+
+                <div class="search-results">
+                    <section class="search-results-column">
+                        <h3 class="search-results-subheading">
+                            知识库
+                        </h3>
+
+                        <p id="noResult">
+                            “{{keyword}}”没有结果。
+                            <a title="主页" href="/index.html">
+                                浏览知识库
+                            </a>
+                        </p>
+
+                        <ul class="search-results-list">
+                            <li class="search-result" v-for="r in results">
+
+                                <a :href="'article.html?'+r.ArticleId" class="search-result-link">{{r.Title}}</a>
+
+                                <span class="search-result-votes meta-count">{{r.Helpful}}</span>
+
+                                <ul class="meta-group">
+                                    <li>
+                                        <ol class="breadcrumbs search-result-breadcrumbs">
+
+                                            <li :title="r.Type.Parent.Name">
+                                                <a
+                                                    :href="'categories?id='+r.Type.Parent.TypeId+'&name='+r.Type.Parent.Name">
+                                                    {{r.Type.Parent.Name}}
+                                                </a>
+                                            </li>
+
+                                            <li :title="r.Type.Name">
+                                                <a :href="'sections.html?'+r.Type.TypeId">
+                                                    {{r.Type.Name}}
+                                                </a>
+                                            </li>
+
+                                        </ol>
+                                    </li>
+                                    <li class="meta-data">
+
+                                        {{r.User.UserName}}
+
+                                    </li>
+                                    <li class="meta-data"><time :datetime="r.UpdateTime" :title="r.UpdateTime"
+                                            data-datetime="relative">{{r.UpdateTime}}</time></li>
+                                </ul>
+                                <div class="search-result-description" v-html="r.Content"></div>
+                            </li>
+
+                        </ul>
+
+                    </section>
+
+                </div>
+
+                <nav class="pagination">
+                    <ul>
+                        <li class="pagination-first" v-if="page>1">
+                            <a href="JavaScript:;" @click="searchResult(1)">«</a>
+                        </li>
+
+                        <li class="pagination-prev" v-if="page>1">
+                            <a href="JavaScript:;" rel="prev" @click="searchResult(page-1)">‹</a>
+                        </li>
+
+                        <li class="pagination-current" v-for="i in index" v-if="page==i">
+                            <span>{{i}}</span>
+                        </li>
+                        <li v-else>
+                            <span @click="searchResult(i)">{{i}}</span>
+                        </li>
+
+                        <li class="pagination-next" v-if="totalPages>1&&totalPages!=page">
+                            <a href="javascript:;" rel="next" @click="searchResult(page+1)">›</a>
+                        </li>
+
+                        <li class="pagination-last" v-if="totalPages!=page">
+                            <a href="javascript:;" @click="searchResult(totalPages)">»</a>
+                        </li>
+
+                    </ul>
+                </nav>
+
+            </div>
+
+        </main>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-inner">
+                <a title="主页" href="index.html">帮助中心</a>
+
+                <div class="footer-language-selector">
+
+                    <div class="dropdown language-selector" aria-haspopup="true">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <div class="btn-group dropup">
+                                    <button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+                                        style="color:#4f6d8c ;">简体中文&nbsp;<img
+                                            src="/public/images/xiangxia.svg" /></button>
+                                    <ul class="dropdown-menu" style="margin-left: -75px;">
+                                        <li v-for="l in langua">
+                                            <a href="javascript:;"> {{l.name}} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="public/js/jquery.min.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
+    <script src="public/js/vue.min.js"></script>
+    <script src="public/js/vue-resource v1.5.1.js"></script>
+    <script src="/public/js/huobi-socket.js"></script>
+    <script src="/public/js/toastr.min.js"></script>
+
+    <script>
+        // 新增公告web socket推送
+        var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+        socket.connect();
+        socket.on("Notification", function (data) {
+            console.log(data);
+            toastr.success(data.data);
+        });
+
+        var search; //搜索值
+        $(function () {
+            //获取路径传过来的值
+            var url = location.search;
+            var urlResult = [];
+            var arrUrl = url.substr(1).split("&");
+            for (var j = 0; j < arrUrl.length; j++) {
+                urlResult[j] = decodeURI(arrUrl[j].split("=")[1]);
+            }
+            search = urlResult[0];
+
+            new Vue({
+                el: "#all",
+                data: {
+                    keyword: search, //关键字
+                    len: 0, //评论条数
+                    results: [], //搜索数据
+                    totalPages: "", //总页数
+                    index: "1", //下标
+                    page: "", //当前页
+                    langua: [] //语言信息
+                },
+                methods: {
+                    // 获取搜索内容
+                    searchResult(page) {
+                        $.ajax({
+                            url: "https://huobi.xis7707.com/api/articles/search/zh-CN/" +
+                                search + "/" + page + "/10",
+                            type: "get",
+                            success: (data) => {
+                                console.info(data.data);
+                                //评论条数
+                                this.len = data.data.total;
+                                if (data.data.data.length <= 0) {
+                                    // 如果为零显示
+                                    $("#noResult").css("display", "block");
+                                    $(".pagination").css("display", "none");
+                                } else {
+                                    // 如果大于零显示
+                                    $(".search-results-list").css("display", "block");
+                                    this.results = data.data.data; //搜索数据传值
+                                    this.totalPages = data.data.totalPages; //总页数
+                                    this.page = data.data.page; //当前页
+                                    var list = [];
+                                    for (var i = 1; i <= data.data.totalPages; i++) {
+                                        list.push(i);
+                                    }
+                                    this.index = list; //下标
+                                }
+                            }
+                        })
+                    },
+                    //获取语言列
+                    lang() {
+                        $.ajax({
+                            url: "https://huobi.xis7707.com/api/lang",
+                            type: "get",
+                            success: (data) => {
+                                console.info(data.data);
+                                this.langua = data.data;
+                            }
+                        });
+                    }
+                },
+                mounted: function () {
+                    //需要触发的页面加载事件
+                    this.searchResult(1);
+                    this.lang();
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>

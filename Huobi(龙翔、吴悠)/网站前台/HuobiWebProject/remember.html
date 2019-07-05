@@ -1,0 +1,76 @@
+<html lang="en" class="u-bg-transparent turbolinks-progress-bar">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Zendesk Auth</title>
+  <link rel="stylesheet" href="/public/css/login.css">
+  <link rel="stylesheet" href="/public/css/request.css" />
+  <link rel="stylesheet" href="/public/css/doctype.css" />
+  <link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+  <style>
+    html.turbolinks-progress-bar::before {
+      content: ' ';
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 2000;
+      background-color: #0076ff;
+      height: 3px;
+      opacity: 1;
+      width: 0%;
+      transition: width 0ms ease-out, opacity 0ms ease-in;
+      transform: translate3d(0, 0, 0);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="modal">
+
+    <h2 class="title">请给我设置一个新密码</h2>
+
+    <form id="password-reset-form" class="box box_form" action="" accept-charset="UTF-8" method="post"><input
+        name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="">
+      <input type="hidden" name="return_to_on_failure" id="return_to_on_failure" value="">
+      <input type="hidden" name="return_to" id="return_to" value="">
+      <p>要重置您的 <strong>https://huobiglobal.zendesk.com</strong> 密码，输入您的电邮地址，我们会给您发送一封带有说明的电邮。</p>
+
+      <fieldset>
+        <label for="email">电邮</label>
+        <input type="text" name="email" id="email">
+        <input type="hidden" name="brand_id" id="brand_id" value="114095082532">
+        <input type="hidden" name="auth_origin" id="auth_origin" value="114095082532,false,true">
+        <input type="hidden" name="theme" id="theme" value="hc">
+        <input type="hidden" name="role" id="role" value="agent">
+      </fieldset>
+
+      <div class="controls">
+        <input type="submit" name="commit" value="提交" class="button primary">
+        <a href="zendesk.html">取消</a>
+      </div>
+    </form>
+  </div>
+</body>
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/script.js"></script>
+<script src="/public/js/snippet.js"></script>
+<script src="/public/js/doctype.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+  // 新增公告web socket推送
+  var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+  socket.connect();
+  socket.on("Notification", function (data) {
+    console.log(data);
+    toastr.success(data.data);
+  });
+</script>
+
+</html>

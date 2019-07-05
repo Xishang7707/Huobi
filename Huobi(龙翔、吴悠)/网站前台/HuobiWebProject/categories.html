@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="public/images/logo.png">
+	<title>帮助中心</title>
+
+	<!-- 引入样式 -->
+	<link href="public/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="public/css/style.css" rel="stylesheet" />
+	<link href="public/css/request.css" rel="stylesheet" />
+	<link href="/public/css/toastr.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+	<div id="all">
+		<header class="header">
+			<div class="logo">
+				<a href="index.html">
+					<img src="public/images/huobi.png" height="37" alt="logo">
+				</a>
+			</div>
+			<div class="nav-wrapper">
+				<span class="icon-menu"></span>
+				<nav class="user-nav" id="user-nav">
+
+					<a class="submit-a-request" href="requests.html">提交请求</a>
+				</nav>
+			</div>
+		</header>
+
+
+		<main role="main">
+			<div class="container-divider"></div>
+			<div class="container">
+				<nav class="sub-nav">
+					<ol class="breadcrumbs">
+
+						<li title="帮助中心">
+
+							<a href="index.html">帮助中心</a>
+
+						</li>
+
+						<li :title="name">{{name}}</li>
+
+					</ol>
+
+					<form role="search" class="search" action="/search.html" accept-charset="UTF-8" method="get">
+						<input type="search" name="query" id="query" placeholder="搜索" aria-label="搜索" /></form>
+				</nav>
+
+				<div class="category-container">
+					<div class="category-content">
+						<header class="page-header">
+							<h1>{{name}}</h1>
+
+						</header>
+
+						<div class="section-tree">
+
+							<section class="section" v-for="type in articleTypes">
+								<h3 class="section-tree-title">
+									<a :href="'sections.html?'+type.TypeId">{{type['Name']}}</a>
+								</h3>
+
+								<ul class="article-list">
+
+									<li class="article-list-item article-promoted"
+										v-for="page in type['articles']['Data']">
+
+										<span v-if="page['Flag']" data-title="被推荐的文章" class="icon-star"></span>
+
+										<a :href="'article.html?'+page['ArticleId']" class="article-list-link">
+											{{page['Title']}}
+										</a>
+									</li>
+									<li v-if="type['articles']['Data']['length']>5"><a
+											:href="'sections.html?'+type.TypeId">查看更多</a></li>
+
+								</ul>
+
+							</section>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</main>
+
+		<!-- 底部 -->
+		<footer class="footer">
+			<div class="footer-inner">
+				<a title="主页" href="index.html">帮助中心</a>
+
+				<div class="footer-language-selector">
+
+					<div class="dropdown language-selector" aria-haspopup="true">
+						<div class="row clearfix">
+							<div class="col-md-12 column">
+								<div class="btn-group dropup">
+									<button style="border: none;" class="btn btn-default" data-toggle="dropdown"
+										style="color:#4f6d8c ;">简体中文&nbsp;<img
+											src="/public/images/xiangxia.svg" /></button>
+									<ul class="dropdown-menu" style="margin-left: -75px;">
+										<li v-for="l in langua">
+											<a href="javascript:;"> {{l.name}} </a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+</body>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/bootstrap.min.js"></script>
+<script src="public/js/snippet.js"></script>
+<script src="public/js/script.js"></script>
+<script src="public/js/vue.min.js"></script>
+<script src="public/js/vue-resource v1.5.1.js"></script>
+<script src="/public/js/huobi-socket.js"></script>
+<script src="/public/js/toastr.min.js"></script>
+
+<script>
+	// 新增公告web socket推送
+	var socket = new HuobiSocket('wss://huobi.xis7707.com/ws')
+	socket.connect();
+	socket.on("Notification", function (data) {
+		console.log(data);
+		toastr.success(data.data);
+	});
+
+	var typeId, name;
+	$(function () {
+		//获取路径传的值
+		var url = location.search;
+		var urlResult = [];
+		var arrUrl = url.substr(1).split("&");
+		for (var j = 0; j < arrUrl.length; j++) {
+			urlResult[j] = decodeURI(arrUrl[j].split("=")[1]);
+		}
+		typeId = urlResult[0]; //主题Id
+		name = urlResult[1]; //主题名
+		//赋值title
+		$("head title").text(name + " — 帮助中心");
+
+		//获取文章主题
+		new Vue({
+			el: "#all",
+			data: {
+				name: name,
+				mainType: '', //主题类型
+				articleTypes: "", //文章类型
+				langua: [] //语言信息
+			},
+			mounted: function () {
+				// 获取主题下的分类下的所有文章
+				$.ajax({
+					url: "https://huobi.xis7707.com/api/articles/categories/zh-cn/" + typeId,
+					success: (data) => {
+						console.log(data);
+						this.mainType = data['data']['mainType']; //主题类型
+						this.articleTypes = data['data']['articleTypes']; //文章类型
+					}
+				});
+
+				//获取语言列
+				$.ajax({
+					url: "https://huobi.xis7707.com/api/lang",
+					type: "get",
+					success: (data) => {
+						console.info(data.data);
+						this.langua = data.data;
+					}
+				});
+			}
+		})
+
+	});
+</script>
+
+</html>
